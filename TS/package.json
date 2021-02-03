@@ -12,7 +12,6 @@
     "build": "tsns build",
     "docker:build": "docker build -t ${npm_package_name}:${npm_package_version} .",
     "docker:run": "docker run --rm ${npm_package_name}:${npm_package_version}",
-    "commitmsg": "validate-commit-msg",
     "lint:ts": "tslint --project tsconfig.json",
     "lint-and-fix:-ts": "tslint --project tsconfig.json --fix",
     "build-and:test": "run-s build test-once",
