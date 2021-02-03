@@ -1,6 +1,15 @@
 import { Token } from "./Token";
 
-abstract class Expr {}
+interface Visitor<R> {
+  visitBinaryExpr(expr: Binary): R;
+  visitGroupingExpr(expr: Grouping): R;
+  visitLiteralExpr(expr: Literal): R;
+  visitUnaryExpr(expr: Unary): R;
+}
+
+abstract class Expr {
+  abstract accept<R>(visitor: Visitor<R>): R;
+}
 
 class Binary extends Expr {
   readonly left: Expr;
@@ -14,6 +23,10 @@ class Binary extends Expr {
     this.operator = operator;
     this.right = right;
   }
+
+  accept<R>(visitor: Visitor<R>): R {
+    return visitor.visitBinaryExpr(this);
+  }
 }
 
 class Grouping extends Expr {
@@ -24,6 +37,10 @@ class Grouping extends Expr {
 
     this.expression = expression;
   }
+
+  accept<R>(visitor: Visitor<R>): R {
+    return visitor.visitGroupingExpr(this);
+  }
 }
 
 class Literal extends Expr {
@@ -33,6 +50,10 @@ class Literal extends Expr {
     super();
 
     this.value = value;
+  }
+
+  accept<R>(visitor: Visitor<R>): R {
+    return visitor.visitLiteralExpr(this);
   }
 }
 
@@ -45,5 +66,9 @@ class Unary extends Expr {
 
     this.operator = operator;
     this.right = right;
+  }
+
+  accept<R>(visitor: Visitor<R>): R {
+    return visitor.visitUnaryExpr(this);
   }
 }

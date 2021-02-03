@@ -6,7 +6,17 @@ const types = [
 ];
 
 function defineAst(baseName, types) {
-  console.log(`abstract class ${baseName} {}\n\n`);
+  // define visitor
+  console.log(`interface Visitor<R> {
+    ${types
+      .map((x) => x.split("|")[0].trim())
+      .map((type) => `visit${type}${baseName}(expr: ${type}): R;`)
+      .join("\n")}
+  }\n\n`);
+
+  console.log(`abstract class ${baseName} {
+    abstract accept<R>(visitor: Visitor<R>): R;
+  }\n\n`);
 
   types.forEach((type) => {
     defineType(baseName, type);
@@ -28,6 +38,10 @@ function defineType(baseName, type) {
       super();
   
       ${args.map((x) => `this.${x[0]} = ${x[0]};`).join("\n")}
+    }
+
+    accept<R>(visitor: Visitor<R>): R {
+      return visitor.visit${name}${baseName}(this);
     }
   }\n\n`);
 }
