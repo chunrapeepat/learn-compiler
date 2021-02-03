@@ -3,10 +3,10 @@ import { TokenType } from "../const/TokenType";
 export class Token {
   readonly type: TokenType;
   readonly lexeme: string;
-  readonly literal: object;
+  readonly literal: any;
   readonly line: number;
 
-  constructor(type: TokenType, lexeme: string, literal: object, line: number) {
+  constructor(type: TokenType, lexeme: string, literal: any, line: number) {
     this.type = type;
     this.lexeme = lexeme;
     this.literal = literal;
