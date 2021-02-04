@@ -1,12 +1,13 @@
 import { ASTPrinter } from "./compiler/ASTPrinter";
-import { Binary, Unary, Literal, Grouping } from "./compiler/Expr";
-import { Token } from "./compiler/Token";
-import { TokenType } from "./const/TokenType";
+import { Parser } from "./compiler/Parser";
+import { Scanner } from "./compiler/Scanner";
 
-const expression = new Binary(
-  new Unary(new Token(TokenType.MINUS, "-", null, 1), new Literal(123)),
-  new Token(TokenType.STAR, "*", null, 1),
-  new Grouping(new Literal(45.67))
-);
+const source = `-123 * (10 + 20 * 2)`;
+const scanner = new Scanner(source);
+const parser = new Parser(scanner.scanTokens());
 const printer = new ASTPrinter();
-console.log("result:", printer.print(expression));
+
+const syntaxTree = parser.parse();
+if (syntaxTree !== null) {
+  console.log("result:", printer.print(syntaxTree));
+}
