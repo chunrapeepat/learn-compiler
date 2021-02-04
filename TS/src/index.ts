@@ -1,4 +1,5 @@
-import { ASTPrinter, Binary, Unary, Literal, Grouping } from "./compiler/Expr";
+import { ASTPrinter } from "./compiler/ASTPrinter";
+import { Binary, Unary, Literal, Grouping } from "./compiler/Expr";
 import { Token } from "./compiler/Token";
 import { TokenType } from "./const/TokenType";
 
