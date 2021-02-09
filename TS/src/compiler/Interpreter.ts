@@ -1,12 +1,38 @@
 import { TokenType } from "../const/TokenType";
-import { Binary, Expr, Grouping, Literal, Unary, Visitor } from "./Expr";
+import {
+  Binary,
+  Expr,
+  Grouping,
+  Literal,
+  Unary,
+  Visitor as ExprVisitor,
+} from "./Expr";
+import { Expression, Stmt, Visitor as StmtVisitor } from "./Stmt";
 
-export class Interpreter implements Visitor<any> {
+export class Interpreter implements ExprVisitor<any>, StmtVisitor<void> {
+  interpret(statements: Stmt[]): void {
+    try {
+      for (const statement of statements) {
+        this.execute(statement);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  visitExpressionStmt(stmt: Expression) {
+    this.evaluate(stmt.expression);
+    return null;
+  }
+  visitPrintStmt(stmt: Expression) {
+    const val = this.evaluate(stmt.expression);
+    console.log(`[Print] ${JSON.stringify(val)}`);
+    return null;
+  }
   visitLiteralExpr(expr: Literal) {
     return expr.value;
   }
   visitGroupingExpr(expr: Grouping): any {
-    return this.evaluate(expr);
+    return this.evaluate(expr.expression);
   }
   visitUnaryExpr(expr: Unary): any {
     const right = this.evaluate(expr.right);
@@ -47,6 +73,9 @@ export class Interpreter implements Visitor<any> {
   private isTruthy(object: any) {
     if (object === null) return false;
     return Boolean(object);
+  }
+  private execute(stmt: Stmt) {
+    stmt.accept(this);
   }
   private evaluate(expr: Expr) {
     return expr.accept(this);
