@@ -1,15 +1,15 @@
 import { Expr } from "./Expr";
 
-interface Visitor<R> {
+export interface Visitor<R> {
   visitExpressionStmt(expr: Expression): R;
   visitPrintStmt(expr: Print): R;
 }
 
-abstract class Stmt {
+export abstract class Stmt {
   abstract accept<R>(visitor: Visitor<R>): R;
 }
 
-class Expression extends Stmt {
+export class Expression extends Stmt {
   readonly expression: Expr;
 
   constructor(expression: Expr) {
@@ -23,7 +23,7 @@ class Expression extends Stmt {
   }
 }
 
-class Print extends Stmt {
+export class Print extends Stmt {
   readonly expression: Expr;
 
   constructor(expression: Expr) {
